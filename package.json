@@ -1,0 +1,11 @@
+{
+  "name": "mizan",
+  "version": "1.0.0",
+  "description": "a mizan for validating javascript objects",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "bahi hussein",
+  "license": "ISC"
+}
