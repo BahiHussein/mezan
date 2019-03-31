@@ -13,23 +13,43 @@ const scenario = [
         label: 'email address',
         required: false,
         type: 'string',
-        length: {min:1,max:10}
+        length: {min:2, max:100},
+        regex:/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     },
     {
         path: 'salary.amount',
         label: 'paied salary',
         required: true,
-        type:'number',
+        type:'string',
+        canParse: 'date'
+
+    },
+    {
+        path: 'luc.list',
+        type: 'array',
+        inclusive: ['luc','email','eeee'],
+        required: true
+    },
+    {
+        path: 'gender',
+        type: 'string',
+        oneOf: ['male','female'],
+        require: true,
+        exclusive: ['email']
 
     }
 ]
 
 const obj = {
-    ip: 123,
-    email: 'ba',
+    ip: '12asdasdasdasd3',
+    email: 'bahi.hussein@gmail.com',
     salary:{
-        amount: 20
-    }
+        amount: '2012'
+    },
+    luc: {
+        list: []
+    },
+    gender: 'male'
 }
 
 let mezan = new Mezan();
@@ -37,8 +57,7 @@ let mezan = new Mezan();
 let config = {
     errors: {
         require:'missing value ya wad '
-    },
-    order: ['type','length','range']
+    }
 }
 
 let results = mezan.validate(scenario, obj,config);
