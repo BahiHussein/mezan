@@ -5,15 +5,16 @@
  module.exports = Mezan;
 
  var defaults  = {
+    marker: '$prop',
     errors: {
-       required: 'missing param',
-       length: 'invalid length',
-       regex: 'invalid regex',
-       type: 'invalid type',
-       oneOf: 'invalid option',
-       inclusive: 'missing dependences',
-       exclusive: 'existing conflict',
-       canParse: 'invalid parsing'
+       required: '$prop is required',
+       length: '$prop has invalid length',
+       regex: '$prop has invalid format',
+       type: '$prop invalid type',
+       oneOf: '$prop invalid option',
+       inclusive: '$prop dependent on ',
+       exclusive: '$prop conflict with other',
+       canParse: '$prop invalid parsing'
     }
 }
 
@@ -52,7 +53,7 @@
         var result = true;
         switch(scheme.canParse){
             case 'date': 
-                result = (isNaN(Date.parse(prop)))?false:true;
+                result = (new Date(prop) !== "Invalid Date") && !isNaN(new Date(prop));
                 break;
             case 'int':
                 result = (isNaN(parseInt(prop)))?false:true;
@@ -91,12 +92,17 @@
 }
 
  Mezan.prototype.createError = function(validation, scheme, config){
-     return {
+    if(!scheme.errors)scheme.errors ={};
+    var errorObj = {
         label: scheme.label || scheme.path || '',
         path: scheme.path,
-        error: config.errors[validation] || this.defaults.errors[validation] || '',
-        on:JSON.stringify(scheme[validation])
+        error: scheme.errors[validation] || config.errors[validation] || this.defaults.errors[validation] || '',
+        on: validation
     }
+    var marker =config.marker||this.defaults.marker;
+    if(errorObj.error.includes(marker))errorObj.error = errorObj.error.replace(marker, errorObj.label);
+    
+    return errorObj;
  }
 
 
@@ -114,6 +120,9 @@
 
         for(var r=0; r<keys.length; r++){
             var fn = this[`${keys[r]}Validation`];
+
+            if(!scheme.required && !prop) break;
+
             if(fn){
                 if(fn.bind(this)(prop, scheme, obj)==false){
                     errors.push(this.createError(keys[r],scheme, config));
@@ -121,7 +130,6 @@
                 }
             }
         }
-        
         
     }
     return errors;

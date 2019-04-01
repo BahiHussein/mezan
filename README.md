@@ -1,4 +1,18 @@
-const Mezan = require('./index');
+## MEZAN a light weight, tiny package for validating JS objects 
+
+
+Installition 
+
+```
+npm install mezan
+```
+
+How to use 
+
+```javascript 
+const mezan = require('mezan'); 
+
+/* descriping how the object the we will validate must look like */
 
 const rules = [
     /* it is required to have a string name property with specific min and max length */
@@ -7,7 +21,7 @@ const rules = [
         path: 'name',
         /* property label - returned back on the error object 
         if it is not valid */
-        label: 'User name',
+        label: 'User Email',
         /* required - error throwen if now existing */
         required: true,
         /* type - string,number,boolean,object,array */
@@ -24,96 +38,46 @@ const rules = [
         regex:/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     },
     {
-        path: 'birth',
-        label: 'user birth date',
+        path: 'age',
+        label: 'user age',
         required: false,
-        type:'number',
+        type:'string',
         /* the property must be a string and  can be parsed to date */
         canParse: 'date'
 
     },
     {
         path: 'gender',
-        required: true,
         type: 'string',
         oneOf: ['male','female'],
-        
+        require: true
     },
     {
         /* { info: {skills: ['master of cooking ','football player']} }*/
         path: 'info.skills',
-        required: true,
         type: 'array',
-        
+        required: false
     },
     {
         path: 'shipping.country',
-        required: true,
-        type: 'string',
+        type: 'string'
         /* if object has path 'shipping.country'
          must have the pathes in the inclusive array */
         inclusive: ['shipping.address','email'],
-        errors: {
-            required: `$prop is required for a product to be shipped`,
-            inclusive: '$prop require the existance of shipping address and email'
-        }
 
     },
     {
         path: 'shipping.address',
-        type: 'string',
+        type: 'string'
         inclusive: ['shipping.country'],
     },
     {
         path: 'pick.location',
-        label: 'product pick location',
-        required: true,
         type: 'string',
-        
+        oneOf: ['male','female'],
+        require: true,
         /* if pick.location exists paths in exclusive array should  not exists*/
-        exclusive: ['shipping'],
-        errors: {
-            exclusive: '$prop either shipping address or pick location must be submitted'
-        }
+        exclusive: ['shipping']
     }
 ]
-
-const obj = {
-    name: 'bahi hussein',
-    email: 'bahi.hussein@gmail.com',
-    gender: 'male',
-    birth: 1554112180214,
-
-    pick: {
-        location: 'Area 32, Zone 43'
-    },
-
-    info: {
-        skills: ['coding','eating', 'sleeping']
-    },
-
-    shipping: {
-        country: 'Egypt'
-    },
-
-    salary:{
-        amount: '2012'
-    },
-    luc: {
-        list: []
-    },
-
-    
-}
-
-let mezan = new Mezan();
-
-let config = {
-    errors: {
-        require:'$prop is required'
-    }
-}
-
-let results = mezan.validate(rules, obj,config);
-
-console.log(results);
+```
