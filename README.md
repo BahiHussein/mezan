@@ -132,6 +132,38 @@ let results = mezan.validate(rules, obj, config);
 
 console.log(results);
 ```
+```javascript 
+[ 
+    { 
+        label: 'User name',
+        path: 'name',
+        error: 'User name has invalid length',
+        on: 'length' 
+    },
+
+    { 
+        label: 'language',
+        path: 'language',
+        error: 'language has invalid type',
+        on: 'type' 
+    },
+
+    { 
+        label: 'shipping country',
+        path: 'shipping.country',
+        error:'shipping country require the existance of shipping address and email',
+        on: 'inclusive' 
+    },
+    
+    { 
+      label: 'product pick location',
+        path: 'pick.location',
+        error:'product pick location either shipping address or pick location must be submitted',
+        on: 'exclusive' 
+    } 
+]
+
+```
 
 
 ## methods 
