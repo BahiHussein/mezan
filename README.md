@@ -27,7 +27,7 @@ const rules = [
         /* type - string,number,boolean,object,array */
         type: 'string',
         /* length range*/ 
-        length: {min: 10, max:20}
+        length: {min: 1, max:2}
     },
     {
         path: 'email',
@@ -51,6 +51,12 @@ const rules = [
         required: true,
         type: 'string',
         oneOf: ['male','female'],
+        
+    },
+    {
+        path: 'language',
+        required: true,
+        type: 'string',
         
     },
     {
@@ -95,10 +101,11 @@ const rules = [
 ];
 
 const obj = {
-    name: 'bahi hussein',
+    name: 'bahi',
     email: 'bahi.hussein@gmail.com',
     gender: 'male',
     birth: 1554112180214,
+    language: 1,
 
     pick: {
         location: 'Area 32, Zone 43'
