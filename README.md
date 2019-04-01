@@ -10,7 +10,7 @@ npm install mezan
 How to use 
 
 ```javascript 
-const Mezan = require('./index');
+const Mezan = require('mezan');
 
 let mezan = new Mezan();
 
