@@ -1,5 +1,7 @@
 const Mezan = require('./index');
 
+let mezan = new Mezan();
+
 const rules = [
     /* it is required to have a string name property with specific min and max length */
     {
@@ -48,6 +50,7 @@ const rules = [
     },
     {
         path: 'shipping.country',
+        label: 'shipping country',
         required: true,
         type: 'string',
         /* if object has path 'shipping.country'
@@ -61,6 +64,7 @@ const rules = [
     },
     {
         path: 'shipping.address',
+        label: 'shipping address',
         type: 'string',
         inclusive: ['shipping.country'],
     },
@@ -76,7 +80,7 @@ const rules = [
             exclusive: '$prop either shipping address or pick location must be submitted'
         }
     }
-]
+];
 
 const obj = {
     name: 'bahi hussein',
@@ -94,23 +98,14 @@ const obj = {
 
     shipping: {
         country: 'Egypt'
-    },
+    }
+};
 
-    salary:{
-        amount: '2012'
-    },
-    luc: {
-        list: []
-    },
-
-    
-}
-
-let mezan = new Mezan();
 
 let config = {
     errors: {
-        require:'$prop is required'
+        required:'$prop is required',
+        type: '$prop has invalid type'
     }
 }
 
