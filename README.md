@@ -25,7 +25,7 @@ const rules = [
         /* required - error throwen if now existing */
         required: true,
         /* type - string,number,boolean,object,array */
-        type: 'string',
+        type: String,
         /* length range*/ 
         length: {min: 1, max:2}
     },
@@ -33,7 +33,7 @@ const rules = [
         path: 'email',
         label: 'User email address',
         required: true,
-        type: 'string',
+        type: String,
         length: {min:8, max:100},
         regex:/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     },
@@ -41,7 +41,7 @@ const rules = [
         path: 'birth',
         label: 'user birth date',
         required: false,
-        type:'number',
+        type: Number,
         /* the property must be a string and  can be parsed to date */
         canParse: 'date'
 
@@ -49,28 +49,28 @@ const rules = [
     {
         path: 'gender',
         required: true,
-        type: 'string',
+        type: String,
         oneOf: ['male','female'],
         
     },
     {
         path: 'language',
         required: true,
-        type: 'string',
+        type: String,
         
     },
     {
         /* { info: {skills: ['master of cooking ','football player']} }*/
         path: 'info.skills',
         required: true,
-        type: 'array',
+        type: Array,
         
     },
     {
         path: 'shipping.country',
         label: 'shipping country',
         required: true,
-        type: 'string',
+        type: String,
         /* if object has path 'shipping.country'
          must have the pathes in the inclusive array */
         inclusive: ['shipping.address','email'],
@@ -83,14 +83,14 @@ const rules = [
     {
         path: 'shipping.address',
         label: 'shipping address',
-        type: 'string',
+        type: String,
         inclusive: ['shipping.country'],
     },
     {
         path: 'pick.location',
         label: 'product pick location',
         required: true,
-        type: 'string',
+        type: String,
         
         /* if pick.location exists paths in exclusive array should  not exists*/
         exclusive: ['shipping'],
@@ -176,13 +176,63 @@ console.log(results);
 properties are validated in order. **required** property should be added at first to avoid validation of un-existing property.
 
 **required** boolean
+
 **length** number or object {min: number, max: number}
+
 **type** string|number|boolean|object|array
+
 **oneOf** check if property values is one of the given array values ['male','female']
+
 **canParse** check if value can be parsed to int|float|date
+
 **regex** test property value using regexp
+
 **inclusive** array of property paths ['user.name', 'user.age'] that are required to exists if this path exists. example: by adding inclusive:['user.name', 'user.age'] to path 'user', it means that if user path exists the inclusive paths must exists too. 
+
 **exclusive** array of property paths the must not exists on the existance of the current path 
+
+**items**  accepts {object} or {array} if a path is to array. item can be used to validated elements of array 
+
+```
+[{
+        path: 'other',
+        required: true,
+        type: Array,
+        length: {min: 3},
+        /* is items is {object} each item must pass the validation test */
+        items:{type:Number}
+            
+}]
+
+[{
+        path: 'other',
+        required: true,
+        type: Array,
+        length: {min: 3},
+        /* is items is {array} each item must pass on of the validations, in this case array items can be a number or string */
+        items:[{type:Number}, {type:String}]
+            
+}]
+
+```
+
+with items property error comes with more elaborate details about the failing element 
+```
+{ label: 'other',
+    path: 'other',
+    error: 'on of the other items is invalid',
+    on: 'items --> type',
+    value:
+     '12,foo,1,Fri Apr 05 2019 14:44:36 GMT+0200 (Eastern European Standard Time),flower --> Fri Apr 05 2019 14:44:36 GMT+0200 (Eastern European Standard Time)' 
+}
+
+/**
+it shows that items  are failing because of type test 
+and on the value the "-->" shows which element in failing 
+*/
+
+
+```
 
 **error** for adding a custom error for this specific scheme overriding config error and default errors
 

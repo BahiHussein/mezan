@@ -13,7 +13,7 @@ const rules = [
         /* required - error throwen if now existing */
         required: true,
         /* type - string,number,boolean,object,array */
-        type: 'string',
+        type: String,
         /* length range*/ 
         length: {min: 1, max:2}
     },
@@ -21,7 +21,7 @@ const rules = [
         path: 'email',
         label: 'User email address',
         required: true,
-        type: 'string',
+        type: String,
         length: {min:8, max:100},
         regex:/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     },
@@ -29,7 +29,7 @@ const rules = [
         path: 'birth',
         label: 'user birth date',
         required: false,
-        type:'number',
+        type:Number,
         /* the property must be a string and  can be parsed to date */
         canParse: 'date'
 
@@ -37,28 +37,28 @@ const rules = [
     {
         path: 'gender',
         required: true,
-        type: 'string',
+        type: String,
         oneOf: ['male','female'],
         
     },
     {
         path: 'language',
         required: true,
-        type: 'string',
+        type: String,
         
     },
     {
         /* { info: {skills: ['master of cooking ','football player']} }*/
         path: 'info.skills',
         required: true,
-        type: 'array',
+        type: Array,
         
     },
     {
         path: 'shipping.country',
         label: 'shipping country',
         required: true,
-        type: 'string',
+        type: String,
         /* if object has path 'shipping.country'
          must have the pathes in the inclusive array */
         inclusive: ['shipping.address','email'],
@@ -71,21 +71,32 @@ const rules = [
     {
         path: 'shipping.address',
         label: 'shipping address',
-        type: 'string',
+        type: String,
         inclusive: ['shipping.country'],
     },
     {
         path: 'pick.location',
         label: 'product pick location',
         required: true,
-        type: 'string',
+        type: String,
         
         /* if pick.location exists paths in exclusive array should  not exists*/
         exclusive: ['shipping'],
         errors: {
             exclusive: '$prop either shipping address or pick location must be submitted'
         }
-    }
+    },
+    {
+        path: 'other',
+        required: true,
+        type: Array,
+        length: {min: 3},
+        /* each item must path the validation */
+        items:{
+                type:Number
+            }
+    },
+
 ];
 
 const obj = {
@@ -105,7 +116,8 @@ const obj = {
 
     shipping: {
         country: 'Egypt'
-    }
+    },
+    other: [12,{x:1},12,new Date(),"l"]
 };
 
 
