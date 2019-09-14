@@ -25,7 +25,7 @@ var defaults  = {
 }
 
 /**
- * scenario 
+ * scenario
  * required:true/false
  */
 function Mezan(){
@@ -96,13 +96,13 @@ Mezan.prototype.inclusiveValidation = function(prop, scheme, mto){
 Mezan.prototype.canParseValidation = function(prop, scheme){
     var result = true;
     switch(scheme.canParse){
-        case 'date': 
+        case 'date':
             result = (new Date(prop) !== "Invalid Date") && !isNaN(new Date(prop));
             break;
         case 'int':
             result = (isNaN(parseInt(prop)))?false:true;
             break;
-        case 'float': 
+        case 'float':
             result = ((isNaN(parseFloat(prop)))?false:true);
     }
     return this.vReturn(result);
@@ -136,7 +136,7 @@ Mezan.prototype.lengthValidation = function(prop, scheme){
 }
 
 /**
- * @param {Boolean} 
+ * @param {Boolean}
  * @param {Object} {value: on: }
  */
 Mezan.prototype.vReturn = function(state, error){
@@ -148,35 +148,35 @@ Mezan.prototype.itemsValidation = function(prop, scheme, mto){
     /* or multilbe object -- if its is array / match any will work */
     /* incase of object each much correspond with property */
     var itemScheme = scheme.items;
-    //array or object 
+    //array or object
     if(prop.constructor === Array) {
-            var error; 
+            var error;
             /* loop over array items */
             if(this._isObject(itemScheme)){
                 for(var i=0; i<prop.length; i++){
                     error = this.evalScheme(prop[i],itemScheme,mto);
                     if(error)return this.vReturn(false, error);
-                    
+
                 }return this.vReturn(true);
-                
+
             } else if(this._isArray(itemScheme)){
                 /* for each array item */
                 for(var x=0; x<prop.length; x++){
                     var matched = false;
-                   
+
                     /* loop over schemes */
                     for(var s=0; s<itemScheme.length; s++){
                         error = this.evalScheme(prop[x],itemScheme[s],mto);
                         if(!error){
                             matched = true;
-                            /* the current prop item is valid - move to the next item in prop */ 
+                            /* the current prop item is valid - move to the next item in prop */
                             break;
-                        } 
+                        }
                     }
                     if(!matched)return this.vReturn(matched, error);
                 }
                 return this.vReturn(true);
-                
+
             }
     } else {return this.vReturn(false)}
 }
@@ -200,8 +200,8 @@ Mezan.prototype.createError = function(evalResult, scheme, config){
 
  /**
  @param {any} property value to be validated
- @param {object} mto  main target object 
- @scheme {array} object for the object to be validated against 
+ @param {object} mto  main target object
+ @scheme {array} object for the object to be validated against
  */
 
 Mezan.prototype.evalScheme = function(prop, scheme, mto){
@@ -233,9 +233,12 @@ Mezan.prototype.validate = function(schemes, mto, config){
         var scheme = schemes[i];
         var prop = this.getDeepValue(mto, scheme.path);
 
-        var result = this.evalScheme(prop, scheme, mto); 
+        var result = this.evalScheme(prop, scheme, mto);
         if(result && result.failedProp)errors.push(this.createError(result,scheme, config));
 
     }
-    return errors;
+    return {
+      hasError: (error.length>0),
+      error: erorr
+    }
 }

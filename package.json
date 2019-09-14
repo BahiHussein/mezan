@@ -1,6 +1,6 @@
 {
   "name": "mezan",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "a mizan for validating javascript objects",
   "repository": "https://github.com/BahiHussein/mezan",
   "main": "index.js",
