@@ -238,7 +238,6 @@ Mezan.prototype.validate = function(schemes, mto, config){
 
     }
     return {
-      hasError: (error.length>0),
-      error: erorr
+      error: (errors.length>0)?errors:undefined;
     }
 }
